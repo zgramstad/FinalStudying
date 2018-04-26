@@ -204,9 +204,48 @@ $$z_k^{(i)} = 1 \text{ if } k = \text{argmin}_j ||x^{(i)} - \mu_j||^2; 0 \text{ 
 
 * $J$ is quadratic in $\mu$ **(again, why does this matter?)**
 * each $x^{(i)}$ is independent **(again, is this an assumption or a fact?)**
-* 
+* To minimize $J$ keeping $z$ fixed, take the derivative wrt to $\mu$ and set equal to 0: $$2 \sum^N_{i=1}z_k^{(i)}(x^{(i)} - \mu_k) = 0$$
+$$\mu_k = \frac{\sum_iz_k^{(i)}x^{(i)}}{\sum_i z_k^{(i)}}$$
+
+$\mu_k$ is the sum of the values of the points assigned to cluster $k$ divided by the number of data points assigned to cluster $k$ (i.e. the value of the average point)
+
+### Choices
+
+**Choosing K**
+
+**Choosing initial cluster means**
+
+**Choosing Distance Function**
+
 
 ### Important discussion about K-means clustering
+**High Level**
+
+* Convergence is guaranteed. Though, the minimum may be local and not global.
+* However, results produced depend on the initial values for the means, and it frequently happens that suboptimal partitions are found. The standard solution is to try a number of different starting points.
+* It can be slow since it is O(mK) (compute distance for each point for every cluster)
+
+**Pros**
+
+* Kind of scalable O(mk)
+* Effective
+* Guaranteed to converge
+
+**Cons**
+
+* distance metric
+* vulnerable to outliers and midpoints
+* may find local minimum
+* dependent on initial choices
+* clusters can become empty (no datapoints are in a cluster)
+* each point can only be assigned to a single cluster
+
+**Best for**
+
+* Convex shapes
+* Similar-sized clusters
+* Much smaller K value than number of datapoints
+
 
 ## Gaussian Mixture Models
 ### [In-depth explanation of GMMs Devika referenced](https://jakevdp.github.io/PythonDataScienceHandbook/05.12-gaussian-mixtures.html)
