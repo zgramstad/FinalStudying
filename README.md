@@ -1,7 +1,7 @@
 # FinalStudying
 StudyGuides for Finals
 
-Use [latest testing Macdown build](https://macdown.uranusjr.com/history/testing/) for Macs.
+Use [Macdown (latest testing build)](https://macdown.uranusjr.com/history/testing/) for Macs.
 
 Enable LaTeX generation:
 
