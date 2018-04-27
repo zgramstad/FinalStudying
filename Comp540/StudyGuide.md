@@ -27,6 +27,9 @@
 
 
 ## What is EM (expectation maximization)?
+
+*An explanation of EM as related to k-means.*
+
 Lets review EM. In EM, you randomly initialize your model parameters, then you alternate between (E) assigning values to hidden variables, based on parameters and (M) computing parameters based on fully observed data.
 
 **E-Step:** Coming up with values to hidden variables, based on parameters. If you work out the math of chosing the best values for the class variable based on the features of a given piece of data in your data set, it comes out to "for each data-point, chose the centroid that it is closest to, by euclidean distance, and assign that centroid's label." The proof of this is within your grasp! See lecture.
@@ -36,6 +39,9 @@ Lets review EM. In EM, you randomly initialize your model parameters, then you a
 So what? Well this gives you an idea of the qualities of k-means. Like EM, it is provably going to find a local optimum. Like EM, it is not necessarily going to find a global optimum. It turns out those random initial values do matter.
 
 from [Stanford CS221](http://stanford.edu/~cpiech/cs221/handouts/kmeans.html)
+
+For a more detailed explanation (pages 2-6): [EM high level explanation](http://cs229.stanford.edu/notes/cs229-notes8.pdf
+)
 
 ## HMMs
 
@@ -130,6 +136,12 @@ There are 6 steps to PCA:
 6. Transform the original dataset $X$ to obtain the k-dimensional feature subspace $Y$: $$Y= W^T \cdot X$$
 
 
+### Computing the covariance matrix of $X$
+
+$$X^TX$$
+
+<!-- Pretty sure the section below is not needed...
+
 ### [Computing the covariance matrix of the original d-dimensional datset $X$](https://math.stackexchange.com/questions/710214/how-to-construct-a-covariance-matrix-from-a-2x2-data-set?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa)
 
 $\bar x$ = means along the row dimension of $X$ (squash the columns).
@@ -160,6 +172,7 @@ $$
 * $var(y)=(7−\frac{11}{2})^2+(4−\frac{11}{2})^2$
 * $cov(x,y)=(3−\frac{5}{2})(7−\frac{11}{2})+(2−\frac{5}{2})(4−\frac{11}{2})$
 
+-->
 ### [Computing the eigenvalues and eigenvectors of a 2x2 matrix](http://lpsa.swarthmore.edu/MtrxVibe/EigMat/MatrixEigen.html)
 
 [Of a 3x3](http://wwwf.imperial.ac.uk/metric/metric_public/matrices/eigenvalues_and_eigenvectors/eigenvalues2.html)
@@ -168,6 +181,9 @@ $$
 It is possible to use a kernel trick (and preferable if the data is not easily linearly separable).
 
 Commonly used is the [RBF (gaussian radial basis function) Kernel](https://en.wikipedia.org/wiki/Radial_basis_function_kernel): $$K(x,x') = exp(\frac{-||x-x'||^2}{2\sigma^2})$$ where $\sigma$ is a free parameter.
+
+### Additional discussion
+After you're done transforming your data, does the new data correlate to understandable features? No, not really. It doesn't really mean anything anymore because you transformed it by its eigenvectors.
 
 ## K-means Clustering
 K-means clustering is a form of unsupervised learning (used to explore data structure, outliers and better understand features). K-Means is really just the EM (Expectation Maximization) algorithm applied to a particular naive bayes model.
@@ -249,6 +265,92 @@ $\mu_k$ is the sum of the values of the points assigned to cluster $k$ divided b
 
 ## Gaussian Mixture Models
 ### [In-depth explanation of GMMs Devika referenced](https://jakevdp.github.io/PythonDataScienceHandbook/05.12-gaussian-mixtures.html)
+
+# Notes (aka "word vomit") from Gunny OHs
+
+Mostly, just stud that Gunny talked about that would likely be on the exam. The information has/will be augmented into the rest of the study guide.
+
+## The Likely Structure of the Exam
+If you have 6 questions:
+
+* you will probably have 1 question from the past. 
+Testable things from the past include variations of linear model, logistic model, general linear models. Take something that extends upon something extensions of basic gaussian models. Think about the stuff that she talks about that are extended upon.
+* you'll have you that's very general, basic stat concepts. 
+* The remaining 4 will most likely be NN, decision trees, em and k-means, pca. 
+* HMM is like a bit of hit or miss, RL bit of hit or miss.
+
+## Neural Networks
+
+* how to count parameters for CNN, maxpool, convolution layers
+* activation functions tend to do (ReLU, sigmoid, tanh)
+* on cheatsheet, it would be good to know how to do the forward backward pass
+* not expecting to write convolutional equations in math form. Might be able to forward and backword pass for neural networks
+* To understand the 4 fundamental equations of backprop: [Explanation of Backprop](http://neuralnetworksanddeeplearning.com/chap2.html#the_four_fundamental_equations_behind_backpropagation)
+
+## EM Algorithm & GMMixture Models
+
+* know how to work the E-step and M-step
+* M step is doing maximization (MLE on Q function)
+* K-means and EM are very connected
+* K-means assumes gaussians
+* Just think about K-means and Gaussian
+
+[EM high level explanation](http://cs229.stanford.edu/notes/cs229-notes8.pdf
+)
+
+## Random Forest & Decision Trees
+
+* random forest is just ensemble of random decision trees
+* you might be given a toy dataset to use a decision tree on, but no one is going to ask you to do a random forest. Just talk about one classifier and why it's not enough, or why more trees would help, or what we be good or bad about more trees
+* Do classification along each axis
+* RF vs. DT: what makes a random forest random? How does ensembling happen? why is it good? If you have a bunch of weak classifiers, they might make different classification mistakes. That means that individual mistakes diminish. So the averages will remain. Randomness is important. Look into the subtleness of how it works.
+* The more spaces you make the more specific you can make your classifier. Your trees are too deep.
+* Bagging. Always sample with replacement. If you don't replace, you're adding a lot of systematic bias.
+* More trees is usually better. Could be more biased. Usually in practice people use 1000 trees. People don't usually go above 1000. Having deep trees is much more likely to be bad.
+* Boosting and bagging. Average vote is a great. 
+* Know bagging. It's pretty testable.
+
+
+## Graphical Models (HMMs)
+
+* bayes nets
+* hmms
+* most-easily testable is HMMs
+* 4 main algorithms: what we really want to know is the forward and backward pass. EM HMM probably is too complicated to be tested on.
+* back pass is basically the reverse of the forward
+* any state is based on states on before and after, so it is very computationally expensive
+* Might get a toy dataset with 5 datapoints. Now initialize, do forward pass, do backward pass. The math should be super easy.
+
+
+## Basic MLE
+
+* Know your way through basic calculus. Probably won't be super complicated. Only as hard as simple beta model
+
+## PCA
+
+* Covariance matrix is always $X^TX$
+* Basically eigenvalue decomposition. Every time you think of PCA, just think of eigenvectors.
+* You are basically doing dimensionality reduction in a very mathematical way.
+* After you're done, you don't really have the original features. Does it correlate? No. It doesn't really mean anything anymore because you just have eigenvectors.
+
+## Random things that are important
+
+Reenforcement Learning: 
+
+* understand what a Q function is and understand how the training process works. You might be asked to do one or two steps of a trainining simulation. Could be qualitative questions?
+* Know neural work update algorithms in principle at a high level maybe, and why they're better than SGD. (adam, rmsprop)
+* The more complex your optimization plane, the more intricate of an update rule you 
+* Slide 23 GLM. Know pretty generally how it works.
+
+Bring a calculator to feel more comfortable and to check your work
+
+## Bias vs. variance
+Bias is equivalent to underfitting and variance is equivalent to overfitting. Think about your classifier as a policeman. He can be biased. He is very likely to do the same thing no matter what data he sees. But if high variance, then look at everything at a very detailed level and case-by-case.
+
+Increase in bias, is increase in generality prediction. Increase in variance, is increase in sensitivity to change.
+
+High bias tries to fit to a preconceived model. High variance will try more to fit the data exactly. There is always a tradeoff. This is where tuning comes in.
+
 
 ## Additional Suggestions
 * Run through Value iteration (Slide 57 for class 4/18) (mdp for RL.pptx)
