@@ -43,6 +43,25 @@ from [Stanford CS221](http://stanford.edu/~cpiech/cs221/handouts/kmeans.html)
 For a more detailed explanation (pages 2-6): [EM high level explanation](http://cs229.stanford.edu/notes/cs229-notes8.pdf
 )
 
+### Applying EM to Gaussian Mixture Models
+
+E-step: learn the probability of gaussians:
+
+$w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j | x^{(i)}; \phi, \mu, \Sigma)$
+Where $Q_i(z^{(i)} = j)$ is the probability that $z^{(i)}$ takes the value $j$ in the distribution $Q-i$.
+
+M-step: Maximize with respect to $\phi, \mu, \Sigma$ 
+
+This is just MLE stuff. The math is too complicated type out, but essentially:
+
+1. Take the log likelihood of the distribution including the $Q_i$ (the probability function of the latent variable). 
+2. Take the derivative w.r.t. each parameter needed to maximize, and set equal to zero.
+3. Solve for each variable. (May have to use langrangian for variables with constraints).
+
+
+
+
+
 ## HMMs
 
 For when you have a sequence of observations and a sequence of hidden states that generated those observaions, and you want determine the most likely set of underlying hidden states.
@@ -228,6 +247,7 @@ $\mu_k$ is the sum of the values of the points assigned to cluster $k$ divided b
 ### Choices
 
 **Choosing K**
+
 
 **Choosing initial cluster means**
 
