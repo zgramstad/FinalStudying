@@ -51,7 +51,7 @@
 ### How to count parameters for CNN: maxpool and convolution layers
 ### What the differences between activation functions (ReLU, sigmoid, tanh)
 
-For the sigmoid function, the \sigma function beomes flat when it nears 0 or 1. Thus a weight in the final layer will learn slowly if the output neuron is either low activation or high activation. It is common to say that the output neuron has *saturated* and, as a result, the weight has stopped learning (or is learning slowly).
+For the sigmoid function, the $\sigma$ function becomes flat when it nears 0 or 1. Thus a weight in the final layer will learn slowly if the output neuron is either low activation or high activation. It is common to say that the output neuron has *saturated* and, as a result, the weight has stopped learning (or is learning slowly).
 
 ### [The Four Fundamental Equations of Backprop](http://neuralnetworksanddeeplearning.com/chap2.html#the_four_fundamental_equations_behind_backpropagation )
 
