@@ -31,24 +31,32 @@
 
 ### Random Forests
 
+* Random forest is just an ensemble of random decision trees
+
 ### Random Forest vs. Decision Tree
+
+* What makes a random forest random? How does ensembling happen? why is it good? If you have a bunch of weak classifiers, they might make different classification mistakes. That means that individual mistakes diminish. So the averages will remain. Randomness is important. Look into the subtleness of how it works.
+* More trees is usually better. Could be more biased. Usually in practice people use 1000 trees. People don't usually go above 1000. Having deep trees is much more likely to be bad than having a wider set of trees.
 
 ### Ensembling, Boosting, and Bagging
 
-
-* random forest is just ensemble of random decision trees
-* you might be given a toy dataset to use a decision tree on, but no one is going to ask you to do a random forest. Just talk about one classifier and why it's not enough, or why more trees would help, or what we be good or bad about more trees
-* Do classification along each axis
-* RF vs. DT: what makes a random forest random? How does ensembling happen? why is it good? If you have a bunch of weak classifiers, they might make different classification mistakes. That means that individual mistakes diminish. So the averages will remain. Randomness is important. Look into the subtleness of how it works.
-* The more spaces you make the more specific you can make your classifier. Your trees are too deep.
-* Bagging. Always sample with replacement. If you don't replace, you're adding a lot of systematic bias.
-* More trees is usually better. Could be more biased. Usually in practice people use 1000 trees. People don't usually go above 1000. Having deep trees is much more likely to be bad.
-* Boosting and bagging. Average vote is a great. 
+* The more segmentations of your data you do, the more specific you make your classifier. If there are a lot of decision boxes, then your trees are too deep.
+* When bagging, always sample with replacement. If you don't replace, you're adding a lot of systematic bias.
+* Boosting and bagging: Average vote is a great. 
 * Know bagging. It's pretty testable.
+
+
+### Potential Test Question
+You might be given a toy dataset to use a decision tree on, but no one is going to ask you to do a random forest. For anything related to forests, just talk about one classifier and why it's not enough, or why more trees would help, or what we be good or bad about more trees.
+
+
 
 ## Neural Networks
 
 ### How to count parameters for CNN: maxpool and convolution layers
+
+
+
 ### What the differences between activation functions (ReLU, sigmoid, tanh)
 
 For the sigmoid function, the $\sigma$ function becomes flat when it nears 0 or 1. Thus a weight in the final layer will learn slowly if the output neuron is either low activation or high activation. It is common to say that the output neuron has *saturated* and, as a result, the weight has stopped learning (or is learning slowly).
