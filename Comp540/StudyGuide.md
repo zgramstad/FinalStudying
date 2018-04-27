@@ -66,11 +66,11 @@ This is just MLE stuff. The math is too complicated type out, but essentially:
 
 For when you have a sequence of observations and a sequence of hidden states that generated those observaions, and you want determine the most likely set of underlying hidden states.
 
-* $$e_t$$: an obsevation
-* $$x_t$$: a hidden state
-* $$\pi$$: the initial state probability matrix (P(X_0 = X))
-* $$a$$: hidden state transition probabilities (probability from going from one hidden state to another)
-* $$b$$: emission probability (probability of emitting observation given hidden state)
+* $e_t$: an obsevation
+* $x_t$: a hidden state
+* $\pi$: the initial state probability matrix (P(X_0 = X))
+* $a$: hidden state transition probabilities (probability from going from one hidden state to another)
+* $b$: emission probability (probability of emitting observation given hidden state)
 
 
 HMM defined by set S, O and probabilites params $[\pi, a, b] = \lambda$
