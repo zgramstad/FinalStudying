@@ -25,6 +25,95 @@
 2. reinforcement learning
 
 
+## Random Forest & Decision Trees
+
+### Decision Trees
+
+### Random Forests
+
+### Random Forest vs. Decision Tree
+
+### Ensembling, Boosting, and Bagging
+
+
+* random forest is just ensemble of random decision trees
+* you might be given a toy dataset to use a decision tree on, but no one is going to ask you to do a random forest. Just talk about one classifier and why it's not enough, or why more trees would help, or what we be good or bad about more trees
+* Do classification along each axis
+* RF vs. DT: what makes a random forest random? How does ensembling happen? why is it good? If you have a bunch of weak classifiers, they might make different classification mistakes. That means that individual mistakes diminish. So the averages will remain. Randomness is important. Look into the subtleness of how it works.
+* The more spaces you make the more specific you can make your classifier. Your trees are too deep.
+* Bagging. Always sample with replacement. If you don't replace, you're adding a lot of systematic bias.
+* More trees is usually better. Could be more biased. Usually in practice people use 1000 trees. People don't usually go above 1000. Having deep trees is much more likely to be bad.
+* Boosting and bagging. Average vote is a great. 
+* Know bagging. It's pretty testable.
+
+## Neural Networks
+
+### How to count parameters for CNN: maxpool and convolution layers
+### What the differences between activation functions (ReLU, sigmoid, tanh)
+
+For the sigmoid function, the \sigma function beomes flat when it nears 0 or 1. Thus a weight in the final layer will learn slowly if the output neuron is either low activation or high activation. It is common to say that the output neuron has *saturated* and, as a result, the weight has stopped learning (or is learning slowly).
+
+### [The Four Fundamental Equations of Backprop](http://neuralnetworksanddeeplearning.com/chap2.html#the_four_fundamental_equations_behind_backpropagation )
+
+The fundamental idea of backprop is $\frac{\partial C}{\partial w}$ the derivative of the Cost function $C$ with respect to weights (or biases) in the network.
+
+$w^l_{jk}$: the weight for the connection from the $k$th neuron in the $(l - 1)^{th}$ layer to the $j^{th}$ neuron in the $l^{th}$ layer. (This is a little unituitive notation. Make sure that this makes sense before proceeding.)
+
+$z^l := w^la^{l-1} + b^l$: the weighted input to the neurons in layer $l$
+
+$z^l_j = \sum_k w^l_{jk}a^{l-1}_k + b^l_j$
+
+$a^l = \sigma(z^l)$ the activation of layer $l$
+
+The Hadamard product $(s ⊙ t)$: denotes elementwise product of two vectors. $(s ⊙ t)_j = s_jt_j$ 
+
+**Error in the output layer, $\delta^L$**
+
+Element-wise:
+$$\delta^L_j = \frac{\partial C}{\partial a^L_j}\sigma'(z_j^L)$$
+
+Vectorized:
+$$\delta^L = \nabla_aC ⊙ \sigma'(z_j^L)$$
+
+$\frac{\partial C}{\partial a^L_j}$ measures how fast the cost changes as function of the $j^{th}$ output activation $a^L_j$. $\frac{\partial C}{\partial a^L_j}$ will vary based on the cost function. (softmax, quadratic, etc.)
+
+$\sigma'(z_j^L)$ measures how fast the activation function $\sigma$ is changing at $z_j^L$
+
+**Error $\delta^l$ in terms of the error in the next layer $\delta^{l+1}$**
+
+$$\delta^l = ((w^{l+1})^T\delta^{l+1}) ⊙ \sigma'(z^l)$$
+
+$(w^{l+1})^T\delta^{l+1}$ moves the error backward from the next layer to the current layer.
+
+$\sigma'(z^l)$ moves the error back from the "front" of layer to the "back" of the layer, through the activation function.
+
+**Rate of change of Cost with respect to any bias $b$ in the network**
+
+Element-wise:
+$$\frac{\partial C}{\partial b^l_j} = \delta^l_j$$
+
+Shorthand:
+$$\frac{\partial C}{\partial b} = \delta$$
+
+The derivative of the cost with respect to the bias is just the error $\delta$.
+
+**Rate of change of cost with respect to any weight in the network**
+
+$$\frac{\partial C}{\partial w^l_{jk}} = a^{l-1}_k\delta_j^l$$
+
+Less index-heavy:
+
+$$\frac{\partial C}{\partial w} = a_{in}\delta_{out}$$
+
+$a_{in}$ is the activation of the neuron input to the weight $w$ and $\delta_{out}$ is the error of the neuron output from the weight $w$. Remember that $w$ describes the edges between two layers of nodes, not the layers themselves.
+
+
+
+### Additional Comments
+
+* It would be good to have the forward and backwards passes on a cheatsheet
+* Don't expect to need to write convolutional equations in math form. Just know them at a high level. More than likely, you will have to be able to forward and backword pass for neural networks
+
 
 ## What is EM (expectation maximization)?
 
@@ -58,7 +147,7 @@ This is just MLE stuff. The math is too complicated type out, but essentially:
 2. Take the derivative w.r.t. each parameter needed to maximize, and set equal to zero.
 3. Solve for each variable. (May have to use langrangian for variables with constraints).
 
-
+### [In-depth explanation of GMMs Devika referenced](https://jakevdp.github.io/PythonDataScienceHandbook/05.12-gaussian-mixtures.html)
 
 
 
@@ -282,9 +371,12 @@ $\mu_k$ is the sum of the values of the points assigned to cluster $k$ divided b
 * Similar-sized clusters
 * Much smaller K value than number of datapoints
 
+## Reenforcement Learning
 
-## Gaussian Mixture Models
-### [In-depth explanation of GMMs Devika referenced](https://jakevdp.github.io/PythonDataScienceHandbook/05.12-gaussian-mixtures.html)
+### Q-Functions
+
+### Value Iteration
+
 
 # Notes (aka "word vomit") from Gunny OHs
 
