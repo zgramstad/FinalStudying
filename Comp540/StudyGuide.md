@@ -634,14 +634,6 @@ Increase in bias, is increase in generality prediction. Increase in variance, is
 
 High bias tries to fit to a preconceived model. High variance will try more to fit the data exactly. There is always a tradeoff. This is where tuning comes in.
 
-## Ethan
-
-Rederiving each algorithm MLE derivation
-Gradient descent update for linear or logistic
-E-M
-derive backpropagation
-
-MLE
 
 ## Additional Suggestions
 * Run through Value iteration (Slide 57 for class 4/18) (mdp for RL.pptx)
