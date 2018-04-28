@@ -25,6 +25,58 @@
 2. reinforcement learning
 
 
+## Ensembling
+
+Ensembling is the provess of combining models instead of using a single model in order to improve prediction. There are two main forms of ensembling: bagging and boosting.
+
+The main causes of error in learning are due to noice, bias, and variance. Ensembling minimizes these factors.
+
+Both bagging and boosting use many learners instead of a single learner. New training sets for each learner are produced by random sampling with replacement on the original training set. In boosting, some observations are weighted, meaning they will be chosen more often in sampling.
+
+Bagging can be done in parallel since models are all independent of each other. Boosting is done sequentially because subsequent models take into account previous models' misclassifications of data by redistributing the weights.
+
+### Classification
+
+Bagging: Apply the N learners to the new observations, then simply average the response (majority vote).
+
+Boosting: Apply the N learners to the new observations, but take a weighted average of the estimates.
+
+### Bagging
+
+
+### Boosting
+
+
+A boosting algorithm specifies:
+
+1. How example weights for each datapoint for each episode of sampling $w_l^{(i)}$ are initialized and updated
+2. how $\alpha^{(l)}$ (the weight for each classifier) is determined
+3. the loss function $J^{(l)}$ associated with each $h^{(l)}$ classifier function
+4. a termination criterion (to determine $L$)
+
+Final prediction:
+
+$$h_{boost}(x) = sign(\sum^L_{l=1} \alpha^{(i)}h^{(i)}(x))$$
+
+### Adaboost Algorithm
+
+Short for "Adaptive Boosting." Used for classifcation problems and aims to convert a set of weak classifiesrs into a strong one.
+
+**Algorithm**
+
+1. Initialize the weight for each datapoint from a uniform distribution over the points.
+2. For iteration $m=1,...,M$:
+	1. fit classifier $h^{(l)}$ to dataset $D$ to minimize weighted loss function. ($L$ is a loss function.)
+	$$J^{(l)} = \frac{1}{m} \sum^m_{i=1} w_l^{(i)}L(y^{(i)},h^{(l)}(x{(i)})$$ 
+	2. Evaluate error rate $\epsilon^{(l)}$ of classifier $h^{(l)}$ and use it to calculate $\alpha^{(l)}$:
+	$$\epsilon^{(l)} = \frac{\sum^m_{i=1} w_l^{(i)} I(h^{(l)}(x^{(i)} \neq y^{(i)}))}{\sum^m_{(i=1)}w_l^{(i)}}$$
+	$$\alpha^{(l)} = 0.5ln\frac{1 - \epsilon^{(l)}}{\epsilon^{(l)}}$$
+	3. If $\epsilon^{(l)} \leq 0.5$, update $w_l$
+	$$w^{(i)}_{l+1} = w^{(i)}_{l+1}exp(\alpha^{(l)})$$ if correctly classified. $-\alpha$ if incorrectly classified.
+3. Final classifier:
+$$h_{boost}(x) = sign(\sum^L_{l=1} \alpha^{(i)}h^{(i)}(x))$$
+	
+
 ## Random Forest & Decision Trees
 
 ### Decision Trees
@@ -157,6 +209,19 @@ This is just MLE stuff. The math is too complicated type out, but essentially:
 
 ### [In-depth explanation of GMMs Devika referenced](https://jakevdp.github.io/PythonDataScienceHandbook/05.12-gaussian-mixtures.html)
 
+**Why GMM instead of k-means**
+
+K-means is non-probabilistic and a pretty simple model, so in the real world it doesn't perform very well in many situations.
+K-means has no measure of uncertainty of cluster assignments. K-means sets up   hyperspheres around data with hard cut-offs. It isn't flexible if data is distributed non-circularly. PCA could help offset this, but there is no guarantee. The two needs of (1) measuring uncertainty and (2) non-circular clusters motivate a generification of E-M.
+
+**Generalizing E-M: Gaussian Mixture Models**
+
+GMM attempts to find a mixture of multi-dimensional Gaussian probability distributions that best model any input dataset. Under the hood, GMM is very similar to k-means. It does qualitatively the same thing Expectation and Maximization. And just like k-means, it can miss the globabally optimal solution.
+
+**GMMs as Density Estimation**
+
+Trying to fit 2 Gaussians to the many moons dataset will not work well. (image) Instead, using 16 components and then ignoring the clustering labels will show a fit much closer to the input data. Instead, of finding separated clusters of data, it models the overall distribution of the data. **It is generative – it can generate new data.** The optimal number of components for a dataset can be found by evaluating the likelihood of data under the model, using cross-validation to avoid over-fitting.
+
 
 
 ## HMMs
@@ -174,8 +239,8 @@ HMM defined by set S, O and probabilites params $[\pi, a, b] = \lambda$
 
 1. Sample $ X\_0 $ from $ P(X\_0) $ which is $\pi$
 2. Repeat for t = 1...T
-	1. Sample x\_t from P(X\_t | X\_{t-1}) which is a
-	2. Sample e\_t from P(e\_t | X\_t) which b
+	1. Sample $x_t$ from $P(X_t | X_{t-1})$ which is $a$
+	2. Sample $e_t$ from $P(e_t | X_t)$ which is $b$
 
 
 You observe a sequence of emissions. What is the probability of the hidden state of the last state given the previous emissions ($P(X_5 | h h h t t)$)?
@@ -256,39 +321,6 @@ There are 6 steps to PCA:
 
 $$X^TX$$
 
-<!-- Pretty sure the section below is not needed...
-
-### [Computing the covariance matrix of the original d-dimensional datset $X$](https://math.stackexchange.com/questions/710214/how-to-construct-a-covariance-matrix-from-a-2x2-data-set?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa)
-
-$\bar x$ = means along the row dimension of $X$ (squash the columns).
-
-$\bar y$ = means along the column dimension of $X$ (squash the rows).
-
-For a 2x2 $X$, the variance-covariance matrix has the following structure:
-
-$$\begin{bmatrix}
-var(x) & cov(x,y)\\
-cov(x,y)& var(y)
-\end{bmatrix}
-$$
-
-where $var(x)=\frac{1}{n−1}∑(x_i−\bar x)^2$ and $cov(x,y)=\frac{1}{n−1}∑(x_i−\bar x)(y_i−\bar y)$.
-
-For:
-
-$$ X|y = \begin{bmatrix}
-3 & |7\\
-2& |2
-\end{bmatrix}
-$$
-
-* $\bar x=\frac{(3+2)}{2}=\frac{5}{2}$
-* $\bar y=\frac{(7+4)}{2}=\frac{11}{2}$
-* $var(x)=(3−\frac{5}{2})^2+(2−\frac{5}{2})^2$
-* $var(y)=(7−\frac{11}{2})^2+(4−\frac{11}{2})^2$
-* $cov(x,y)=(3−\frac{5}{2})(7−\frac{11}{2})+(2−\frac{5}{2})(4−\frac{11}{2})$
-
--->
 ### [Computing the eigenvalues and eigenvectors of a 2x2 matrix](http://lpsa.swarthmore.edu/MtrxVibe/EigMat/MatrixEigen.html)
 
 [Of a 3x3](http://wwwf.imperial.ac.uk/metric/metric_public/matrices/eigenvalues_and_eigenvectors/eigenvalues2.html)
@@ -381,14 +413,145 @@ $\mu_k$ is the sum of the values of the points assigned to cluster $k$ divided b
 
 ## Reenforcement Learning
 
-### Q-Functions
+Reenforcement learning is a method of learning behavior. An agent performs actions in an evironment and receives feedback for those actions. 
+
+$Q(s,a)$: Q evaluates a state, action pair based on the immediate reward and subsequent time-discounted future rewards. The purpose of learning is to teach the agent the most optimal set of actions to take.
+
+$V(s)$:
+
+$\pi(s)$: 
+
+
+**Model-based RL**
+
+There is an explicit model for the environment modeled by T and R. 
+
+Training Phase:
+
+$T(s,a,s')$: state transition model, the probability of transitioning from state $s$ to $s'$ given action $a$ (for MDP). Discovered by counting outcomes $s'$ for each $(s,a)$ pair
+
+$R(s,a,s')$: reward function. Discovered by maintaining a running average of r associated with $(s,a,s')$
+
+Solving Phase:
+
+Solve for optimal $\pi$ using the learned estimates for $T$ and $R$.
+
+
+**Model-free passive RL**
+
+Input: fixed policy $\pi$.
+Goal: Learn $V_{\pi}(s)$
+
+Learner has no choice in actions, but just executes a given policy and learns the long run value of each state for that policy.
+
+**LMS Algorithm**
+
+Gather sequences of episodic interactions from the world according to given policy $\pi$.
+
+For each sequence, for each state $s$ in sequence, maintain a running average of the discounted sum of rewards of the sequence from $s$ to end of sequence.
+
+Pros:
+
+* Easy to understand
+* Doesn't require T and R estimation
+* Eventually computes correct V_{\pi(s)}
+
+Cons:
+
+* Very inefficient. Learns each state separately
+* Fails to take into account the advantage of stat connections
+* Takes a very long time to converge.
+* A new state s is reached, and then another s'. Randomly an unlikely state for s' was chosen. Then the value of s is skewed.
+
+
+**Bellman update:** Use a one-step-look-ahead.
+
+
+
+**TD (Temporal Difference) Algorithm**
+
+Learn, not at the end of a sequence, but on every transition.
+
+$$V^{\pi}(s) \leftarrow (1 - \alpha) V^{\pi}(s) + \alpha (r + \gamma V^{\pi}(s'))$$
+
+Constructs an exponential moving average of $V^{\pi}(s)$, makeing more resent values more important and foret about distant past values.
+
+$$\bar x_n = (1 - \alpha) \bar x_{n-1} + \alpha x_n$$
+
+(Expand $\bar x_{n-1}$ out to 0.)
+
+But, this doesn't tell us anything about a new policy!!
+
+**Model-free active RL**
+
+No knowledge of transitions or rewards. Agent chooses actions "in the now" as opposed to a fixed policy with the goal of learning the optimal policy/(state,action) values
+
+
+**Direct Q-learning**
+
+Learn $Q$ directly! Choose an action $a$ based current state and policy $\pi(s)$
+
+Initialize $Q(s,a) = 0$ for all states, actions.
+
+Loop forever:
+
+Select an action $a = max_a Q(s,a)$
+
+Execute action $a$, environment transitions to state $s'$, receive reward $r$.
+
+$Q(s,a) \leftarrow (1 - \alpha) Q(s,a) + \alpha(r + \gamma \text{ max}_{a'}Q(s',a'))$
+
+Need to be able to generalize, so describe a state using a a vector of features.
+
+**Approximate Q-learning**
+
+If $Q(s,a) = w_1f_1(s,a) + w_1f_1(s,a) + ... + a)$ is represented by a linear function, it is possible to approximate $Q$, and update the weights instead.
+
+difference = $[r + \gamma max_{a'}Q(s',a')] - Q(s,a)$
+
+$$\w_i \leftarrow \w_i + \alpha [difference]f_i(s,a)$$ (online least squares update)
+
+Allows for tuning to specific features, instead of Q as a whole.
+
+**Policy Search**
+
+Problem: Often feature-based policies that approximate or V the best aren't actually the ones that work the best (win games, maximize utilities). 
+
+Solution: learn policies that maximize rewards, not the values that predict them. State with a policy, like the one found by Q-learning and fine-tune the policy by hill climibing on feature weights.
+
+**Offline vs. Online planning** 
+
+Online: Learn as new data comes in. Offline: you have all the data already.
+
+**Exploration vs. Exploitation**
+
+* It is important to not always just choose the best action based on past rewards (exploitation), but also try out new actions that might lead to better rewards (exploration).
+* Random actions (epsilon-greedy) allow more exploration, but can cause thrashing as learning converges, so it's best to lower epsilon over time.
+
+
+Value learning V(s) - learning function that evaluates a state (score for chess, or up a bishop)
+Q-function - value, but is dependent on your action. in chess it's straight forward because everything is deterministic. But if there's something that is not deterministic, or something that 
+If you took this action in the is state what (how good is taking this action in this state). There are some state that are good to ve in, 
+
+if you haven't learned a really good policy, then value is an aggregate of 
+
+policy is the decision strategy.
+Q function could be different 
+
+if you 
+
+
+Equation for Q
+V - evaluating the state (s)
+
+How does grad descent work. you're trying to improve how good your
 
 ### Value Iteration
 
 
 # Notes (aka "word vomit") from Gunny OHs
 
-Mostly, just stud that Gunny talked about that would likely be on the exam. The information has/will be augmented into the rest of the study guide.
+Mostly, just study that Gunny talked about that would likely be on the exam. The information has/will be augmented into the rest of the study guide.
 
 ## The Likely Structure of the Exam
 If you have 6 questions:
@@ -471,6 +634,14 @@ Increase in bias, is increase in generality prediction. Increase in variance, is
 
 High bias tries to fit to a preconceived model. High variance will try more to fit the data exactly. There is always a tradeoff. This is where tuning comes in.
 
+## Ethan
+
+Rederiving each algorithm MLE derivation
+Gradient descent update for linear or logistic
+E-M
+derive backpropagation
+
+MLE
 
 ## Additional Suggestions
 * Run through Value iteration (Slide 57 for class 4/18) (mdp for RL.pptx)
@@ -485,3 +656,36 @@ $\sum^{T-1}_{t=1}\zeta_t(i,j)$" Why is it the expected number?
 
 
 
+<!-- Pretty sure the section below is not needed...
+
+### [Computing the covariance matrix of the original d-dimensional datset $X$](https://math.stackexchange.com/questions/710214/how-to-construct-a-covariance-matrix-from-a-2x2-data-set?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa)
+
+$\bar x$ = means along the row dimension of $X$ (squash the columns).
+
+$\bar y$ = means along the column dimension of $X$ (squash the rows).
+
+For a 2x2 $X$, the variance-covariance matrix has the following structure:
+
+$$\begin{bmatrix}
+var(x) & cov(x,y)\\
+cov(x,y)& var(y)
+\end{bmatrix}
+$$
+
+where $var(x)=\frac{1}{n−1}∑(x_i−\bar x)^2$ and $cov(x,y)=\frac{1}{n−1}∑(x_i−\bar x)(y_i−\bar y)$.
+
+For:
+
+$$ X|y = \begin{bmatrix}
+3 & |7\\
+2& |2
+\end{bmatrix}
+$$
+
+* $\bar x=\frac{(3+2)}{2}=\frac{5}{2}$
+* $\bar y=\frac{(7+4)}{2}=\frac{11}{2}$
+* $var(x)=(3−\frac{5}{2})^2+(2−\frac{5}{2})^2$
+* $var(y)=(7−\frac{11}{2})^2+(4−\frac{11}{2})^2$
+* $cov(x,y)=(3−\frac{5}{2})(7−\frac{11}{2})+(2−\frac{5}{2})(4−\frac{11}{2})$
+
+-->
