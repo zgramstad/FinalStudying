@@ -44,7 +44,7 @@ Boosting: Apply the N learners to the new observations, but take a weighted aver
 ### Bagging
 
 
-### Boosting
+## Boosting
 
 
 A boosting algorithm specifies:
@@ -76,19 +76,124 @@ Short for "Adaptive Boosting." Used for classifcation problems and aims to conve
 3. Final classifier:
 $$h_{boost}(x) = sign(\sum^L_{l=1} \alpha^{(i)}h^{(i)}(x))$$
 	
+### Gradient Boosting
+
+As opposed to Adaboost where weaknesses are identified by weighting data points, in gradient boosting, weaknesses of previous classifier/regressors identified by gradients. The basic idea is that you learn new models based on the residuals (or remaining errors) from the previous models.
+
+Update Rule (if loss function is squared error):
+
+$$h(x^{(i)}) \leftarrow h(x{(i)}) + (y^{(i)} - h(x^{(i)}))$$
+$$h(x^{(i)}) \leftarrow h(x{(i)}) - \frac{\partial J}{\partial h(x^{(i)})}$$
+
+
+**For regression**
+
+Use additive model $\sum_l h_l$. New $h_l$ is added at each iteration.
+
+For loss funcitons other than squared error, residuals and negative gradients are not the same!
+
+A single vector of gradients.
+
+**For classification**
+
+Learn a function $h_c$ for each class $c$
+Use softmax as an individual loss function.
+The loss function $J$ is the KL-divergence between the true distribution $y^{(i)}$ and the predicted softmax distribution $h(x^{(i)})$
+
+$$KLdiv(p,q) = \sum_i p(i) log \frac{p(i)}{q(i)}$$
+
+A 2-d matrix of gradients, for each model $h$ and data point $x^{(i)}$
 
 ## Random Forest & Decision Trees
 
 ### Decision Trees
 
+A Decision Tree Clasifier repetitively divides the working area into sub parts by identifying lines. It terminates when either it has fully divided classes or some criteria of classifier attributes are met (decrease in error not sufficient, etc.).
+
+Any boolean formula can be represented by a decision tree.
+
+There are three possible cost function:
+
+**Misclassification Rate**
+
+$\text{cost}(D) = \frac{1}{|D|} \sum_{(x,y)\in D}I(y \neq \hat y)$
+
+**Entropy**
+
+$p$ = fraction of positive examples in $D$
+
+$\text{cost}(D) = -p \log_2(p) - (1 - p)\log_2(1-p)$
+
+**Gini index** 
+
+$\text{cost}(D) = 2p(1 - p)$
+
+**Deciding what feature to select for division**
+
+Decision tree at every stage selects the split that gives the best (largest) information gain ($ \text{Information Gain}(n) =  \text{Entropy}(x) — ([ \text{weighted average}]* \text{entropy}( \text{children for feature}))$. If information gain is 0, the feature does not divide the working set at all.
+
+**Regression splitting** 
+
+* Split the tree on the maximum j (feature), t (value).
+* If note is not worth splitting, return node.
+* else recurse left and right
+
+Node is not worth splitting when:
+
+* node is pure
+* Depth exceeds max depth defined
+* $|D_left|$ or $|D_right|$ is too small
+* reduction in cost is too small
+
+Pros:
+
+* Easy to interpret
+* handles continuous and discrete features
+* insensitive to data scaling
+* automatic feature selection
+* robust to outliers
+
+Cons:
+
+* Not very accurate (axis aligned cuts)
+* unstable (high variance estimators
+
+[Additional Source](https://medium.com/machine-learning-101/chapter-3-decision-trees-theory-e7398adac567)
+
 ### Random Forests
 
-* Random forest is just an ensemble of random decision trees
+A random forest is just a bagged ensemble of random decision trees. It used to reduce the variance of decisions trees by averaging over many of them.
+
+Train $M$ estimators on different subsets of $D$ chosen randomly with replacement (bootstrapping).
+
+Randomly choose $\sqrt{d}$ features to construct each decision tree, so the trees are as uncorrellated as possible. If there are correlated errors, then ensembling offers no advantage.
+
+**Regression**
+
+$$h(x) = \sum^M_{k=1} \frac{1}{M} h^{(k)}(x)$$
+
+**Classification**
+
+$$h(x) = \text{argmax}_c\sum^M_{k=1} I(h^k(x) = c)$$
+
+Advantages and disadvantages
+
+* Used for both regression and classification
+* Easy to view relative importance of features.
+* Not as likely to overfit
+* Limitation: a large number of trees can make the algorithm slow and ineffective. Fast to train, but slow to create predictions. Increase in accuracy is an increase in trees which results in a slower model.
+* It is is predictive, not descriptive.
 
 ### Random Forest vs. Decision Tree
 
 * What makes a random forest random? How does ensembling happen? why is it good? If you have a bunch of weak classifiers, they might make different classification mistakes. That means that individual mistakes diminish. So the averages will remain. Randomness is important. Look into the subtleness of how it works.
 * More trees is usually better. Could be more biased. Usually in practice people use 1000 trees. People don't usually go above 1000. Having deep trees is much more likely to be bad than having a wider set of trees.
+
+A decision tree will generate some rules based on features and labels. Random Forest randomly selects observations and features to build several decision trees and then averages results.
+
+Deep decision trees may suffer from overfitting. Random Forest prevents overfitting most of the time by creating random subsets of features and building smaller trees using these subsets. After, it combines the subtrees. Note that this doesn't work every time, and it makes computation slower, depending on how many trees your random forest builds.
+
+[Additional Source](https://towardsdatascience.com/the-random-forest-algorithm-d457d499ffcd)
 
 ### Ensembling, Boosting, and Bagging
 
